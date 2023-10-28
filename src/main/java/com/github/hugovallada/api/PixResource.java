@@ -1,14 +1,18 @@
 package com.github.hugovallada.api;
 
+import java.io.IOException;
 import java.util.Objects;
+import java.util.UUID;
 
 import com.github.hugovallada.model.Pix;
 import com.github.hugovallada.service.DictService;
 import com.github.hugovallada.service.PixService;
 
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -36,4 +40,12 @@ public class PixResource {
         return null;
     }
 
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces("image/png")
+    @Path("/qrcode/{uuid}")
+    public Response qrCode(@PathParam("uuid") UUID uuid) throws IOException {
+        // TODO: Adicionar tratamento de exceções
+        return Response.ok(pixService.gerarQrCode(uuid)).build();
+    }
 }

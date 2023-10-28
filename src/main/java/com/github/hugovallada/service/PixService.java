@@ -1,7 +1,12 @@
 package com.github.hugovallada.service;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 import com.github.hugovallada.model.LinhaDigitavel;
@@ -24,6 +29,16 @@ public class PixService {
         // TODO: Implementar Cache
         final var qrCodeString = qrCode.toString();
         return new LinhaDigitavel(qrCodeString, uuid);
+    }
+
+    public BufferedInputStream gerarQrCode(final UUID uuid) throws IOException {
+        // TODO: Recuperar da chave
+        var imagePath = QRCODE_PATH + uuid.toString() + ".png";
+        try {
+            return new BufferedInputStream(new FileInputStream(imagePath));
+        } finally {
+            Files.delete(Paths.get(imagePath));
+        }
     }
 
 }
