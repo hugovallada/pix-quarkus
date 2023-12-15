@@ -2,6 +2,7 @@ package com.github.hugovallada.api;
 
 import com.github.hugovallada.model.LinhaDigitavel;
 import com.github.hugovallada.model.Pix;
+import com.github.hugovallada.model.Transaction;
 import com.github.hugovallada.service.DictService;
 import com.github.hugovallada.service.PixService;
 import jakarta.ws.rs.*;
@@ -61,4 +62,60 @@ public class PixResource {
         // TODO: Adicionar tratamento de exceções
         return Response.ok(pixService.gerarQrCode(uuid)).build();
     }
+
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{uuid}/aprovar")
+    @PATCH
+    @Operation(description = "API responsável por aprovar um pagamento PIX")
+    @APIResponseSchema(Transaction.class)
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "OK"),
+            @APIResponse(responseCode = "201", description = "Retorno OK com a transação criada."),
+            @APIResponse(responseCode = "401", description = "Erro de autenticação dessa API"),
+            @APIResponse(responseCode = "403", description = "Erro de autorização dessa API"),
+            @APIResponse(responseCode = "404", description = "Recurso não encontrado")
+    })
+    public Response aprovarPix(@PathParam("uuid") String uuid) {
+
+        return Response.ok(pixService.aprovarTransacao(uuid).get()).build();
+    }
+
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{uuid}/reprovar")
+    @DELETE
+    @Operation(description = "API responsável por reprovar um pagamento PIX")
+    @APIResponseSchema(Transaction.class)
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "OK"),
+            @APIResponse(responseCode = "201", description = "Retorno OK com a transação criada."),
+            @APIResponse(responseCode = "401", description = "Erro de autenticação dessa API"),
+            @APIResponse(responseCode = "403", description = "Erro de autorização dessa API"),
+            @APIResponse(responseCode = "404", description = "Recurso não encontrado")
+    })
+    public Response reprovarPix(@PathParam("uuid") String uuid) {
+
+        return Response.ok(pixService.reprovarTransacao(uuid).get()).build();
+    }
+
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{uuid}")
+    @GET
+    @Operation(description = "API responsável por aprovar um pagamento PIX")
+    @APIResponseSchema(Transaction.class)
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "OK"),
+            @APIResponse(responseCode = "201", description = "Retorno OK com a transação criada."),
+            @APIResponse(responseCode = "401", description = "Erro de autenticação dessa API"),
+            @APIResponse(responseCode = "403", description = "Erro de autorização dessa API"),
+            @APIResponse(responseCode = "404", description = "Recurso não encontrado")
+    })
+    public Response buscarPix(@PathParam("uuid") String uuid) {
+
+        return Response.ok(pixService.findById(uuid)).build();
+    }
+
+
 }
